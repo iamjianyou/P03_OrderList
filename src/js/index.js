@@ -1,6 +1,43 @@
 
 import Search from './models/Search'
 
+/** Global state of the app 
+ * -Search object
+ * -Shopping list object
+ * -Like recipes
+*/
+
+const state = {}; // global state
+
+// search Controller
+const controlSearch = async() =>{
+    // 1> get query from view
+    const query = 'pizza' //TODO
+    if(query){
+    // 2> New serach object and add to state
+        state.search = new Search(query)
+
+    // 3> Prepare UI for result
+
+
+    // 4> Search for recipes
+        await state.search.getResults();
+
+
+    // 5> Render results on UI
+        console.log(state.search.result);
+    }
+}
+
+
+document.querySelector('.search').addEventListener('submit', e=>{
+    // avoid empty reload
+    e.preventDefault();
+
+    controlSearch();
+
+})
+
 const search = new Search('pizza');
 console.log(search);
 search.getResults();
