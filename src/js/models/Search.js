@@ -9,12 +9,14 @@ export default class Search{
     }
 
     async getResults(query){
-        const key = '391a090e6c5a89c0a9653162d5b2e5e6'
+        // const key = '391a090e6c5a89c0a9653162d5b2e5e6'
         
         try{
-            const res = await axios(`https://www.food2fork.com/api/search?key=${key}&q=${this.query}`);
+            // const res = await axios(`https://www.food2fork.com/api/search?key=${key}&q=${this.query}`);
+            const res = await axios(`https://forkify-api.herokuapp.com/api/search?&q=${this.query}`);
             this.result = res.data.recipes;
-            console.log("the result ",this.result);
+            console.log("the result ", this.result);
+            
     
         } catch(error) {
     
