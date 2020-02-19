@@ -62,8 +62,13 @@ const renderRecipe = recipe => {
     
 };
 
-export const renderResults = recipes => {
+/** Only show 10 items each page form search result*/
+export const renderResults = (recipes, page = 1, resPerPage = 6) => {
+    const start = (page - 1) * resPerPage;
+    const end = page * resPerPage; 
+
     console.log('recipes', recipes)
-    recipes.forEach(renderRecipe);
+
+    recipes.slice(start, end).forEach(renderRecipe);
 
 }
