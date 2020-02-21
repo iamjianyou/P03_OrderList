@@ -41,6 +41,16 @@ elements.searchForm.addEventListener('submit', e=>{
 
 })
 
+elements.searchResPages.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-inline'); // .closet allows the click to find the closet element
+    if (btn){
+        const goToPage = parseInt(btn.dataset.goto, 10);
+        searchView.renderResults(state.search.result, goToPage, 10);
+        searchView.clearResults();
+        searchView.renderResults(state.search.result, goToPage);
+        console.log(goToPage)
+    }
+})
 
 // import axios from 'axios';
 
