@@ -1,5 +1,6 @@
 
 import Search from './models/Search'
+import Recipe from './models/Recipe'
 import {elements} from './views/base'
 import * as searchView from './views/searchView'
 
@@ -50,7 +51,7 @@ elements.searchResPages.addEventListener('click', e => {
         searchView.renderResults(state.search.result, goToPage);
         console.log(goToPage)
     }
-})
+});
 
 // import axios from 'axios';
 
@@ -73,3 +74,11 @@ elements.searchResPages.addEventListener('click', e => {
 
 
 
+/**
+ * Recipe Controller
+ * 
+ */
+
+ const r = new Recipe(46956);
+ r.getRecipe();
+ console.log(r)
