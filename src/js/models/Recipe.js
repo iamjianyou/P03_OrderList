@@ -33,8 +33,9 @@ export default class Recipe {
      }
 
      parseIngredients(){
-        const unitsLong = ['tablespoons', 'tablespoon', 'ounce', 'ounces', 'teaspoon','teaspoons', 'cups', 'pounds'];
+        const unitsLong = ['tablespoons', 'Tablespoon', 'ounce', 'ounces', 'teaspoon','teaspoons', 'cups', 'pounds'];
         const unitsShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
+        
         const newIngredients = this.ingredients.map(el => {
             // 1> Uniform units
             let ingredient = el.toLowerCase();
@@ -43,10 +44,49 @@ export default class Recipe {
 
             });
 
+
             // 2> Remove parentheses
+            ingredient = ingredient.replace(/ *\[[^\]]*]/, '')
+
+            const arrIng = ingredient.split(' ');
+            const unitIndex = arrIng.findIndex(el2 => unitsShort.includes(el2));
+
+            let objInt;
+
+            if(unitIndex > -1){
+                // there is a unit
+                //EX. 4 1/2 cups, arrCount(4, 1/2) --> eval(" 4+1/2" ) ---> 4.5
+                // ex. 4 cups, arrCount is [4]
+                const arrCount = arrIng.slice(0, unitIndex); 
+                let count;
+                if(arrCount.length === 1){ 
+                    count = arrIng[0];
+                }else{
+                    count = eval(arrIng.slice(0, unitIndex).join('+'));
+                }
+
+            }else if(parseInt(arrIng[0], 10)){ 
+                // f.e parseInt('112', 10) retrun 112 which true, or parseInt('string', 10) returns NaN which is false
+                // there is no unit, but 1st element is number
+                objInt = {
+                    count: parseInt(arrIng[0], 10),
+                    unit: '',
+                    ingredient: arrIng.slice(1).join(' ')
+                }
+
+            }else if(unitIndex === -1){
+                // there is no unit and no number in first position
+                objInt = {
+                    count: 1,
+                    unit: '',
+                    ingredient
+
+                }
+            }
+
 
             // 3> Parse ingredients into count, unit and ingredients
-
+            return objInt;
             // 4>
          });
          this.ingredients = newIngredients;
