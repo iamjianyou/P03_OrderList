@@ -1,8 +1,8 @@
-
-import Search from './models/Search'
-import Recipe from './models/Recipe'
-import {elements, clearLoader} from './views/base'
+import Search from './models/Search';
+import Recipe from './models/Recipe';
+import {elements, clearLoader, renderLoader} from './views/base'
 import * as searchView from './views/searchView'
+import * as recipeView from './views/recipeView'
 
 /** Global state of the app 
  * -Search object
@@ -14,50 +14,44 @@ const state = {}; // global state
 
 // search Controller
 const controlSearch = async () => {
-    // 1> get query from view
-    // const query = searchView.getInput();
-    const query = 'pizza';
-    
-    if(query){
-    // 2> New serach object and add to state
-        state.search = new Search(query)
+    // 1) Get query from view
+    const query = searchView.getInput();
 
-    // 3> Prepare UI for result
+    if (query) {
+        // 2) New search object and add to state
+        state.search = new Search(query);
+
+        // 3) Prepare UI for results
         searchView.clearInput();
         searchView.clearResults();
-        try{
-        // 4> Search for recipes
-        await state.search.getResults();
+        renderLoader(elements.searchRes);
 
-
-        // 5> Render results on UI
-        searchView.renderResults(state.search.result);
-
-        }catch(err){
-            alert('shit happens with the search...')
+        try {
+            // 4) Search for recipes
+            await state.search.getResults();
+    
+            // 5) Render results on UI
+            clearLoader();
+            searchView.renderResults(state.search.result);
+        } catch (err) {
+            alert('Something wrong with the search...');
             clearLoader();
         }
     }
 }
 
-// TEST
-window.addEventListener('load', e=>{
-    // avoid empty reload
+elements.searchForm.addEventListener('submit', e => {
     e.preventDefault();
-
     controlSearch();
+});
 
-})
 
-
-elements.searchForm.addEventListener('click', e => {
-    const btn = e.target.closest('.btn-inline'); // .closet allows the click to find the closet element
-    if (btn){
+elements.searchResPages.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-inline');
+    if (btn) {
         const goToPage = parseInt(btn.dataset.goto, 10);
-        searchView.renderResults(state.search.result, goToPage, 10);
         searchView.clearResults();
         searchView.renderResults(state.search.result, goToPage);
-        console.log(goToPage)
     }
 });
 
@@ -82,43 +76,47 @@ elements.searchForm.addEventListener('click', e => {
 
 
 
-/**
- * Recipe Controller
- * 
+/** 
+ * RECIPE CONTROLLER
  */
-
-
-
 //  const r = new Recipe(46956);
 //  r.getRecipe();-
 //  console.log(r)
-const controlRecipe  = async () => {
+const controlRecipe = async () => {
+    // Get ID from url
     const id = window.location.hash.replace('#', '');
-    console.log('get the id with no # -===>>> ', id);
 
-    if(id){
-        // prepare UI for changes
+    if (id) {
+        // Prepare UI for changes
+        recipeView.clearRecipe();
+        renderLoader(elements.recipe);
 
+        // Highlight selected search item
+        // if (state.search) searchView.highlightSelected(id);
 
         // Create new recipe object
-        try{
-            
-            // get recipe data and parese the ingredients
-            state.recipe =  new Recipe(id);        
-            window.r = state.recipe;
-            // Get recipe data
+        state.recipe = new Recipe(id);
+
+        try {
+            // Get recipe data and parse ingredients
             await state.recipe.getRecipe();
-            console.log('state.recipe.parseIngredients --> ', state.recipe.ingredients);
             state.recipe.parseIngredients();
-            //  Caculate serving and time
+
+            // Calculate servings and time
             state.recipe.calcTime();
             state.recipe.calcServings();
+    
+            // Render recipe
+            clearLoader();
+            recipeView.renderRecipe(
+                state.recipe
+            );
+            
 
-            // rendering the recipe
-            console.log(state.recipe);
 
         }catch(err){
-            alert('Error processing recipe!')
+            console.log(err);
+            alert('Error processing recipe!');
         }
         
     }
@@ -126,4 +124,4 @@ const controlRecipe  = async () => {
 // window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
 
-['hashChange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
+['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
