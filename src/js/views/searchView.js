@@ -1,12 +1,32 @@
 import {elements} from './base';
 
 export const getInput = () => elements.searchInput.value;
-export const clearInput = () => {elements.searchInput.value = '';};
+export const clearInput = () => {elements.searchInput.value = '';
+                                };
 export const clearResults = () => {elements.searchResList.innerHTML = '';
-                                    elements.searchResPages.innerHTML = ''};
+                                    elements.searchResPages.innerHTML = '';
+                                };
 
 
 
+
+
+/**
+ * Heighlight the selected one
+ * @param {*} id 
+ */
+export const highlightSelected = id => {
+    const resultsArr = Array.from(document.querySelectorAll('results__link--active'));
+    resultsArr.forEach(el => {
+        el.classList.remove('results__link--active')
+    })
+    // const resultsArr = Array.from(document.querySelectorAll('.results__link'));
+    resultsArr.forEach(el => {
+        el.classList.remove('results__link--active');
+    })
+    document.querySelector(`a[href*="#${id}"]`).classList.add('results__link--active');
+
+}
 
 // 'pasta with tomato and spinach'
 /**
