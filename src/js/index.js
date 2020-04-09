@@ -1,3 +1,4 @@
+import List from './models/List'
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import {elements, clearLoader, renderLoader} from './views/base'
@@ -145,5 +146,8 @@ elements.recipe.addEventListener('click', e => {
         recipeView.updateServingsIngredients(state.recipe);
     }
 
-    console.log(state.recipe);
+    // console.log(state.recipe);
 });
+
+// Testing list add/delete/update items
+// window.l = new List();
