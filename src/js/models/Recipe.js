@@ -9,6 +9,7 @@ export default class Recipe {
     async getRecipe() {
         try {
             const res = await axios(`${proxy}https://forkify-api.herokuapp.com/api/get?rId=${this.id}`);
+            console.log('Get data object but Something went wrong :( -> ', res )
             this.title = res.data.recipe.title;
             this.author = res.data.recipe.publisher;
             this.img = res.data.recipe.image_url;
@@ -16,7 +17,7 @@ export default class Recipe {
             this.ingredients = res.data.recipe.ingredients;
         } catch (error) {
             console.log(error);
-            alert('Something went wrong :(');
+            alert('Something went wrong with data receving :(');
         }
     }
 
@@ -91,6 +92,7 @@ export default class Recipe {
         this.ingredients = newIngredients;
     }
 
+    /** Update Servings count and ingredients*/
     updateServings (type) {
         // Servings
         const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
@@ -99,7 +101,7 @@ export default class Recipe {
         this.ingredients.forEach(ing => {
             ing.count *= (newServings / this.servings);
         });
-
+ 
         this.servings = newServings;
-    }
+    } 
 }
