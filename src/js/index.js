@@ -186,8 +186,8 @@ elements.shopping.addEventListener('click', e => {
  * ********************************************************************************************/
 // think: where to trigger likes of cousre on the button
 
-state.likes = new Likes(); // for testing, remove later on
-likesView.toggleLikeMenu(state.likes.getNumberLikes());
+// state.likes = new Likes(); // for testing, remove later on
+// likesView.toggleLikeMenu(state.likes.getNumberLikes());
 
 const controlLike = () => {
     if(!state.likes) state.likes = new Likes();
@@ -227,6 +227,22 @@ const controlLike = () => {
     likesView.toggleLikeMenu(state.likes.getNumberLikes());
 }
 
+
+
+/** RESTORE Liked recipes ON PAGE RELOADED */
+window.addEventListener('load', () =>{
+    state.likes = new Likes(); 
+
+    // Reastore likes
+    state.likes.readStorage();
+
+    // Toggle like menu button
+    likesView.toggleLikeMenu(state.likes.getNumberLikes()); 
+
+    // Render the existing render 
+    // likes(is the stae likes). likes(is the likes array)
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+} )
 
 /** ********************************************************************************************
  * HANDLING RECIPE REVENT LISTENERS - RECIPE BUTTON CLICKS
