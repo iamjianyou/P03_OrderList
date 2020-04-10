@@ -187,6 +187,7 @@ elements.shopping.addEventListener('click', e => {
 // think: where to trigger likes of cousre on the button
 
 state.likes = new Likes(); // for testing, remove later on
+likesView.toggleLikeMenu(state.likes.getNumberLikes());
 
 const controlLike = () => {
     if(!state.likes) state.likes = new Likes();
@@ -205,8 +206,9 @@ const controlLike = () => {
         likesView.toggleLikeBtn(true);
 
         // Add like to UI list
+        likesView.renderLike(newLike);
         
-        // console.log(state.likes);
+        console.log(state.likes);
 
     } else {
         // Remove like from the state
@@ -218,7 +220,7 @@ const controlLike = () => {
 
         // remove from like from UI list
         // console.log(state.likes);
-        likesView.removeLike(currentID);
+        likesView.deleteLike(currentID);
     }
 
     //
