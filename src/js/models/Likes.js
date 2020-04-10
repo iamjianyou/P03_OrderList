@@ -5,7 +5,7 @@ export default class Likes {
     }
 
     /** Add like */
-    addLikes(id, title, author, img){
+    addLike(id, title, author, img){
         const like = {
             id,
             title,
