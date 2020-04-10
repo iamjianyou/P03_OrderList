@@ -1,11 +1,14 @@
 import List from './models/List'
 import Search from './models/Search';
 import Recipe from './models/Recipe';
+import Likes from './models/Likes';
 import {elements, clearLoader, renderLoader} from './views/base'
 import * as searchView from './views/searchView'
 import * as recipeView from './views/recipeView'
 import * as listView from './views/listView'
-import Likes from './models/Likes';
+import * as likesView from './views/likesView'
+
+
 
 
 /** Global state of the app 
@@ -121,7 +124,8 @@ const controlRecipe = async () => {
             // Render recipe
             clearLoader();
             recipeView.renderRecipe(
-                state.recipe
+                state.recipe, 
+                state.likes.isLiked(id)
             );
             
 
@@ -176,10 +180,13 @@ elements.shopping.addEventListener('click', e => {
     
 });
 
+
 /** ********************************************************************************************
  * LIKES CONTROLLER
  * ********************************************************************************************/
 // think: where to trigger likes of cousre on the button
+
+state.likes = new Likes(); // for testing, remove later on
 
 const controlLike = () => {
     if(!state.likes) state.likes = new Likes();
@@ -195,6 +202,7 @@ const controlLike = () => {
             state.recipe.img
         );
         // Toggle the like button
+        likesView.toggleLikeBtn(true);
 
         // Add like to UI list
         console.log(state.likes);
@@ -205,6 +213,7 @@ const controlLike = () => {
 
 
         // Toggle the like button
+        likesView.toggleLikeBtn(false);
 
         // remove from like from UI list
         console.log(state.likes);
@@ -212,8 +221,9 @@ const controlLike = () => {
 }
 
 
-/** Handling recipe button clicks */
-
+/** ********************************************************************************************
+ * HANDLING RECIPE REVENT LISTENERS - RECIPE BUTTON CLICKS
+ * ********************************************************************************************/
 // attach event listener to elements recipe
 elements.recipe.addEventListener('click', e => {
     if (e.target.matches('.btn-decrease, .btn-decrease *')) {
