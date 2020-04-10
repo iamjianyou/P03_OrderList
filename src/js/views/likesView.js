@@ -6,3 +6,7 @@ export const toggleLikeBtn = isLiked => {
     document.querySelector('.recipe__love use').setAttribute('href', `img/icons.svg#${iconString}`);
 } 
 
+// show/hide likes icon based on its number-length
+export const toggleLikeMenu = numLikes => {
+    elements.likesMenu.style.visibility = numLikes > 0 ? 'visible' : 'hidden';
+};
